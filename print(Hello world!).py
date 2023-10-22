@@ -1,6 +1,0 @@
-print("Hello")
-print(6)
-print()
-print(2.75)
-print(8 + 2)
-print("8 + 2")
