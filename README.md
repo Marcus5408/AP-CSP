@@ -4,7 +4,7 @@
 
 This GitHub repo serves as a backup for all of the assignments I've done in my AP CSP class, just in case I someday lose the USB drive I've been using to store all of my work. Also can server as proof of me doing work, I guess.
 
-All of the code for the current unit I'm on are in the root directory while the other units are in their respective folders.
+All of the files for the current lesson I'm working on are in the root directory while the other files are in their respective unit's folders.
 
 I accidentally had my USB drive formatted as FAT32 initially, so git didn't work properly and I couldn't commit to this repo. That let to a the repo on GitHub and the repo on my flash drive becoming out-of-sync with non-matching git histories. It took me like a good week of headaches to sort out, but hey, thats over now!
 
