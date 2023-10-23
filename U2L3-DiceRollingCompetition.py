@@ -6,8 +6,8 @@ player_points = 0
 point_map = [100, 90, 80, 70, 60, 50, 40, 30, 20, 10]
 player_rolls, cpu_rolls = [], []
 
-for round in range(0, rounds):
-    print(f"\nROUND {round + 1}!")
+for current_round in range(0, rounds):
+    print(f"\nROUND {current_round + 1}!")
     cpu_roll = random.randint(1, 20)
     cpu_rolls.append(cpu_roll)
     print(f"The computer rolled a {cpu_roll}")
@@ -26,10 +26,10 @@ for round in range(0, rounds):
         player_points += (point_map[round_tries - 1])
         print(f"Player wins and gets {point_map[round_tries - 1]} points!")
     elif round_tied:
-        print(f"Player got a tie! No points gained or lost")
+        print("Player got a tie! No points gained or lost")
     else:
         player_points -= 100
-        print(f"Player loses and loses 100 points!")
+        print("Player loses and loses 100 points!")
 
     time.sleep(5)
 
