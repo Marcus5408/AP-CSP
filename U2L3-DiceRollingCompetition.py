@@ -2,13 +2,12 @@ import random
 import time
 
 rounds = int(input("How many rounds do you want to play? "))
-
 player_points = 0
 point_map = [100, 90, 80, 70, 60, 50, 40, 30, 20, 10]
 player_rolls, cpu_rolls = [], []
 
-for i in range(0, rounds):
-    print(f"\nROUND {i + 1}!")
+for round in range(0, rounds):
+    print(f"\nROUND {round + 1}!")
     cpu_roll = random.randint(1, 20)
     cpu_rolls.append(cpu_roll)
     print(f"The computer rolled a {cpu_roll}")
