@@ -1,4 +1,5 @@
 import random
+import time
 
 rounds = int(input("How many rounds do you want to play? "))
 
