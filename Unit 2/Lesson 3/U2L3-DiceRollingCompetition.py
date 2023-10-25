@@ -26,7 +26,7 @@ for current_round in range(0, rounds):
         round_tries += 1
         if round_roll == cpu_roll: round_tied = True
     
-    # determine the result of the round
+    # determine the result of this round
     if round_roll > cpu_roll:
         player_points += (point_map[round_tries - 1])
         print(f"Player wins and gets {point_map[round_tries - 1]} points!")
