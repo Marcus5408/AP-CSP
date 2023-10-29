@@ -34,8 +34,12 @@ def start(tkinter_root):
     mainloop_running = False
     try:
         tkinter_root.mainloop()
+    except SyntaxError as e:
+        print(f"Error: {e}")
+        print("Mainloop not started")
     except tk.TclError as e:
         print(f"Error: {e}")
+        print("Mainloop not started")
     else:
         print("Mainloop started successfully")
         mainloop_running = True
@@ -47,6 +51,5 @@ def start(tkinter_root):
     if mainloop_running:
         # Only call quit() if mainloop() was run successfully
         tkinter_root.quit()
-
-    # Restart the tkinter mainloop after a file change is detected
-    tkinter_root.after(1000, start, tkinter_root)
+        # Restart the tkinter mainloop after a file change is detected
+        # tkinter_root.after(1000, start, tkinter_root)
