@@ -1,3 +1,4 @@
+from ast import main
 import os
 import sys
 import time
@@ -16,18 +17,36 @@ class MyHandler(FileSystemEventHandler):
             os.execl(sys.executable, sys.executable, *sys.argv)
 
 def start(tkinter_root):
+    """
+    Start the watchdog observer and the tkinter mainloop.
+
+    Args:
+        tkinter_root: The root window of the tkinter application.
+
+    Returns:
+        None
+    """
     event_handler = MyHandler()
     observer = Observer()
     observer.schedule(event_handler, path='.', recursive=True)
     observer.start()
 
-    # Start the tkinter mainloop
-    tkinter_root.mainloop()
+    mainloop_running = False
+    try:
+        tkinter_root.mainloop()
+    except tk.TclError as e:
+        print(f"Error: {e}")
+    else:
+        print("Mainloop started successfully")
+        mainloop_running = True
 
     # Stop the observer when the mainloop is quit
     observer.stop()
     observer.join()
 
+    if mainloop_running:
+        # Only call quit() if mainloop() was run successfully
+        tkinter_root.quit()
+
     # Restart the tkinter mainloop after a file change is detected
-    tkinter_root.quit()
     tkinter_root.after(1000, start, tkinter_root)
