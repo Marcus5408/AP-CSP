@@ -1,33 +1,6 @@
 import tkinter as tk
-import os
-import sys
-import time
 from tkinter import ttk
-from watchdog.observers import Observer
-from watchdog.events import FileSystemEventHandler
-
-class MyHandler(FileSystemEventHandler):
-    def on_any_event(self, event):
-        if event.is_directory:
-            return None
-
-        elif event.event_type == 'modified':
-            print("Reloading...")
-            os.execl(sys.executable, sys.executable, *sys.argv)
-
-if __name__ == "__main__":
-    event_handler = MyHandler()
-    observer = Observer()
-    observer.schedule(event_handler, path='.', recursive=True)
-    observer.start()
-
-    try:
-        while True:
-            time.sleep(1)
-    except KeyboardInterrupt:
-        observer.stop()
-
-    observer.join()
+import watchdog_reloader
 
 database = []
 
@@ -83,4 +56,5 @@ def addToDatabase(name, price, link):
     # Add the game to the treeview
     wishlist_display.insert(parent='', index='end', iid=len(database)-1, text=name, values=(price, link))
 
+watchdog_reloader.start()
 root.mainloop()
