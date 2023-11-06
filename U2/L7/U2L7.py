@@ -1,6 +1,10 @@
+import time
 import tkinter as tk
 from tkinter import ttk
 import watchdog_reloader
+import requests
+from PIL import Image, ImageTk
+from io import BytesIO
 
 database = []
 
@@ -12,16 +16,18 @@ root.geometry("700x600")
 title_label = tk.Label(root, text="Wishlister", font=("Helvetica", 16))
 title_label.grid(row=0, column=0, columnspan=2, padx=10, pady=(10,5))
 
-wishlist_display = ttk.Treeview(root, columns=("Name", "Price", "Link"))
+wishlist_display = ttk.Treeview(root, columns=("Name", "Price", "Link", "Banner"))
 wishlist_display.heading("#0", text="#")
 wishlist_display.heading("#1", text="Name")
 wishlist_display.heading("#2", text="Price")
 wishlist_display.heading("#3", text="Link")
+wishlist_display.heading("#4", text="Banner")
 wishlist_display.column("#0", width=20)
-wishlist_display.column("#1", width=295)
+wishlist_display.column("#1", width=195)
 wishlist_display.column("#2", width=95)
-wishlist_display.column("#3", width=275)
-wishlist_display.grid(row=1, column=0, columnspan=2, padx=5, pady=10)
+wishlist_display.column("#3", width=370)
+wishlist_display.column("#4", width=100)
+wishlist_display.grid(row=1, column=0, columnspan=2, padx=10, pady=(5, 5))
 
 def add_game():
     """
@@ -57,10 +63,10 @@ def add_game():
             name_entry.get(), price_entry.get(), link_entry.get()
         ),
     )
-    add_button.grid(row=3, column=1, padx=10, pady=(0, 10), sticky="e")
+    add_button.grid(row=3, column=1, padx=10, pady=(5, 10), sticky="e")
 
-add_game_button = ttk.Button(root, text="Add Game", command=add_game)
-add_game_button.grid(row=2, column=0, padx=10, pady=(5, 10))
+add_game_button = ttk.Button(root, text="+", command=add_game)
+add_game_button.grid(row=2, column=1, padx=10, pady=(5, 10), sticky="e")
 
 def add_to_db(name, price, link):
     """
@@ -73,7 +79,38 @@ def add_to_db(name, price, link):
 
     Returns: None
     """
-    # Add the game to the database
+    # Get the game's Steam ID from the link
+    steam_id = link.split("/")[4]
+
+    # Use the Steam Storefront API to get the game's information
+    response = requests.get(f"http://store.steampowered.com/api/appdetails?appids={steam_id}", timeout=5)
+    data = response.json()
+
+    # Check if the request was successful
+    if data[steam_id]["success"]:
+        # Get the game's banner image URL
+        banner_url = data[steam_id]["data"]["header_image"]
+
+        # Download the banner image
+        response = requests.get(banner_url, timeout=5)
+        banner_image = Image.open(BytesIO(response.content))
+
+        # Save the banner image
+        banner_image.save(f"{name}_banner.png")
+
+        # Create a PhotoImage object for the banner image
+        banner_photo = ImageTk.PhotoImage(banner_image)
+
+        # Add the game to the treeview with the banner image
+        wishlist_display.insert(
+            parent= "",
+            index= "end",
+            values=(name, price, link, banner_photo)
+        )
+
+        # Keep a reference to the image to prevent garbage collection
+        treeview.image = banner_photo
+
     database.append((name, price, link))
 
     # Add the game to the treeview
@@ -85,5 +122,5 @@ def add_to_db(name, price, link):
         values=(price, link),
     )
 
-watchdog_reloader.start(root)
-# root.mainloop() # this will be uncommented once we stop using watchdog
+# watchdog_reloader.start(root)
+root.mainloop() # this will be uncommented once we stop using watchdog

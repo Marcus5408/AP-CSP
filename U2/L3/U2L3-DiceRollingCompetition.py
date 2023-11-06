@@ -28,7 +28,7 @@ for current_round in range(0, rounds):
         round_total += round_roll
         round_tries += 1
         if round_roll == cpu_roll: round_tied = True
-    
+
     # determine the result of this round
     if round_roll > cpu_roll:
         player_points += (point_map[round_tries - 1])
