@@ -1,126 +1,110 @@
-import time
-import tkinter as tk
-from tkinter import ttk
-import watchdog_reloader
+from os import link
+from PyQt5.QtWidgets import QApplication, QTreeWidget, QTreeWidgetItem
+from PyQt5.QtGui import QIcon, QPixmap
+from PyQt5.QtCore import Qt
 import requests
-from PIL import Image, ImageTk
+from PIL import Image
 from io import BytesIO
+import re
+import json
+
+app = QApplication([])
+
+# Create a QTreeWidget object
+wishlist_display = QTreeWidget()
+wishlist_display.setColumnCount(4)
+wishlist_display.setHeaderLabels(["Name", "Price", "Link", "Banner"])
 
 database = []
 
-root = tk.Tk()
-root.title("Wishlister")
-root.geometry("700x600")
+class GameNotFoundException(Exception):
+    """Exception raised when the game is not found in the Steam API."""
 
-# Create a label for the title
-title_label = tk.Label(root, text="Wishlister", font=("Helvetica", 16))
-title_label.grid(row=0, column=0, columnspan=2, padx=10, pady=(10,5))
+    def __init__(self, game_id, message="Game not found"):
+        self.game_id = game_id
+        self.message = message
+        super().__init__(self.message)
 
-wishlist_display = ttk.Treeview(root, columns=("Name", "Price", "Link", "Banner"))
-wishlist_display.heading("#0", text="#")
-wishlist_display.heading("#1", text="Name")
-wishlist_display.heading("#2", text="Price")
-wishlist_display.heading("#3", text="Link")
-wishlist_display.heading("#4", text="Banner")
-wishlist_display.column("#0", width=20)
-wishlist_display.column("#1", width=195)
-wishlist_display.column("#2", width=95)
-wishlist_display.column("#3", width=370)
-wishlist_display.column("#4", width=100)
-wishlist_display.grid(row=1, column=0, columnspan=2, padx=10, pady=(5, 5))
+    def __str__(self):
+        return f'{self.game_id} -> {self.message}'
 
-def add_game():
-    """
-    Create a new window to add a game to the wishlist.
-
-    Args: None
-    Returns: None
-    """
-    # Create a new window
-    add_window = tk.Toplevel(root)
-    add_window.title("Add Game")
-    add_window.geometry("300x200")
-
-    # Create labels and entry fields for the game information
-    name_label = ttk.Label(add_window, text="Name:")
-    name_entry = ttk.Entry(add_window)
-    price_label = ttk.Label(add_window, text="Price:")
-    price_entry = ttk.Entry(add_window)
-    link_label = ttk.Label(add_window, text="Link:")
-    link_entry = ttk.Entry(add_window)
-
-    name_label.grid(row=0, column=0, padx=10, pady=(10, 5), sticky="w")
-    name_entry.grid(row=0, column=1, padx=10, pady=(10, 5))
-    price_label.grid(row=1, column=0, padx=10, pady=(0, 5), sticky="w")
-    price_entry.grid(row=1, column=1, padx=10, pady=(0, 5))
-    link_label.grid(row=2, column=0, padx=10, pady=(0, 5), sticky="w")
-    link_entry.grid(row=2, column=1, padx=10, pady=(0, 5))
-
-    add_button = ttk.Button(
-        add_window,
-        text="Add Game",
-        command=lambda: add_to_db(
-            name_entry.get(), price_entry.get(), link_entry.get()
-        ),
-    )
-    add_button.grid(row=3, column=1, padx=10, pady=(5, 10), sticky="e")
-
-add_game_button = ttk.Button(root, text="+", command=add_game)
-add_game_button.grid(row=2, column=1, padx=10, pady=(5, 10), sticky="e")
-
-def add_to_db(name, price, link):
-    """
-    Add a game to the database and the treeview.
-
-    Args:
-        name (str): The name of the game.
-        price (str): The price of the game.
-        link (str): The link to the game.
-
-    Returns: None
-    """
-    # Get the game's Steam ID from the link
-    steam_id = link.split("/")[4]
-
-    # Use the Steam Storefront API to get the game's information
-    response = requests.get(f"http://store.steampowered.com/api/appdetails?appids={steam_id}", timeout=5)
-    data = response.json()
+def get_steam_details(game_id:str):
+    # Steam API endpoint
+    url = f"http://store.steampowered.com/api/appdetails?appids={game_id}"
+    response = requests.get(url)
+    data = json.loads(response.text)
 
     # Check if the request was successful
-    if data[steam_id]["success"]:
-        # Get the game's banner image URL
-        banner_url = data[steam_id]["data"]["header_image"]
+    if data[str(game_id)]["success"]:
+        # Get the game's name
+        game_name = data[str(game_id)]["data"]["name"]
+        game_price = data[str(game_id)]["data"]["price_overview"]["final_formatted"]
+        game_found = True
+    else:
+        raise GameNotFoundException(link)
 
-        # Download the banner image
-        response = requests.get(banner_url, timeout=5)
-        banner_image = Image.open(BytesIO(response.content))
+    # Get the game's banner image
+    banner_url = f"https://cdn.cloudflare.steamstatic.com/steam/apps/{game_id}/header.jpg"
+    response = requests.get(banner_url, timeout=5)
+    banner_image = Image.open(BytesIO(response.content))
+    banner_image.save(f"{game_name}_banner.png")
+    banner_pixmap = QPixmap(f"{game_name}_banner.png")
 
-        # Save the banner image
-        banner_image.save(f"{name}_banner.png")
+    database.append(data)
 
-        # Create a PhotoImage object for the banner image
-        banner_photo = ImageTk.PhotoImage(banner_image)
+    return game_name, game_price, banner_pixmap, game_found
 
-        # Add the game to the treeview with the banner image
-        wishlist_display.insert(
-            parent= "",
-            index= "end",
-            values=(name, price, link, banner_photo)
-        )
 
-        # Keep a reference to the image to prevent garbage collection
-        treeview.image = banner_photo
+#    # Add the game to the treeview with the banner image
+#    item = QTreeWidgetItem(wishlist_display)
+#    item.setText(0, game_name)
+#    item.setText(1, game_price)
+#    item.setText(2, link)
+#    item.setIcon(3, QIcon(banner_pixmap))
+#
 
-    database.append((name, price, link))
+# example game link: https://store.steampowered.com/app/2449040/Cursorblade/
+# extract the game's ID from the link, which is after app/
+game_link = "https://store.steampowered.com/app/2449040/Cursorblade/"
+game_id_match = re.search(r'app/(\d+)', game_link)
+if game_id_match is not None:
+    game_id = int(game_id_match.group(1))  # Extract the matched string and convert it to an integer
+else:
+    raise ValueError("Invalid game link")
 
-    # Add the game to the treeview
-    wishlist_display.insert(
-        parent="",
-        index="end",
-        iid=len(database) - 1,
-        text=str(len(database) - 1),
-        values=(price, link),
-    )
+game_name, game_price, banner_pixmap, game_found = get_steam_details(str(game_id))
 
-# watchdog_reloader.start(root)
-root.mainloop() # this will be uncommented once we stop using watchdog
+# Check if the request was successful
+if game_found:
+    # Get the game's banner image URL
+    print(database)
+    banner_url = database[len(database) - 1]["data"]["header_image"]
+
+    # Download the banner image
+    response = requests.get(banner_url, timeout=5)
+    banner_image = Image.open(BytesIO(response.content))
+
+    # Save the banner image
+    banner_image.save(f"{game_name}_banner.png")
+
+    # Create a QPixmap object for the banner image
+    banner_pixmap = QPixmap(f"{game_name}_banner.png")
+
+    # Add the game to the treeview with the banner image
+    item = QTreeWidgetItem(wishlist_display)
+    item.setText(0, game_name)
+    item.setText(1, game_price)
+    item.setText(2, game_link)
+    item.setIcon(3, QIcon(banner_pixmap))
+
+database.append((game_name, game_price, link))
+
+# Add the game to the treeview
+item = QTreeWidgetItem(wishlist_display)
+item.setText(0, str(len(database) - 1))
+item.setText(1, game_price)
+item.setText(2, game_link)
+
+wishlist_display.show()
+
+app.exec_()
