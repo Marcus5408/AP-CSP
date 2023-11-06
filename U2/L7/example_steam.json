@@ -8,25 +8,24 @@
                 "steam_appid": 2449040, 
                 "required_age": 0, 
                 "is_free": False, 
-                "detailed_description": """Cursorblade is a bullet hell game where you play as the cursor, fighting your way through waves of enemies. Combine weapons and items to become more powerful with your own unique builds. Slash, dodge, upgrade, and repeat!<h2 class="bb_tag">Features</h2><ul class="bb_ul"><li>Mouse-only controls.</li></ul><ul class="bb_ul"><li>Create your unique playstyle by combining various weapons and items.</li></ul><ul class="bb_ul"><li>Enjoy mindless fun!</li></ul>
-                """, 
-                "about_the_game": "Cursorblade is a bullet hell game where you play as the cursor, fighting your way through waves of enemies. Combine weapons and items to become more powerful with your own unique builds. Slash, dodge, upgrade, and repeat!<h2 class="bb_tag">Features</h2><ul class="bb_ul"><li>Mouse-only controls.</li></ul><ul class="bb_ul"><li>Create your unique playstyle by combining various weapons and items.</li></ul><ul class="bb_ul"><li>Enjoy mindless fun!</li></ul>", 
+                "detailed_description": "Cursorblade is a bullet hell game where you play as the cursor, fighting your way through waves of enemies. Combine weapons and items to become more powerful with your own unique builds. Slash, dodge, upgrade, and repeat!<h2 class='bb_tag'>Features</h2><ul class='bb_ul'><li>Mouse-only controls.</li></ul><ul class='bb_ul'><li>Create your unique playstyle by combining various weapons and items.</li></ul><ul class='bb_ul'><li>Enjoy mindless fun!</li></ul>", 
+                "about_the_game": "Cursorblade is a bullet hell game where you play as the cursor, fighting your way through waves of enemies. Combine weapons and items to become more powerful with your own unique builds. Slash, dodge, upgrade, and repeat!<h2 class='bb_tag'>Features</h2><ul class='bb_ul'><li>Mouse-only controls.</li></ul><ul class='bb_ul'><li>Create your unique playstyle by combining various weapons and items.</li></ul><ul class='bb_ul'><li>Enjoy mindless fun!</li></ul>", 
                 "short_description": "Cursorblade is a bullet hell game where you play as the cursor, fighting your way through waves of enemies. Combine weapons and items to become more powerful with your own unique builds. Slash, dodge, upgrade, and repeat!",
                 "supported_languages": "English, Thai, Simplified Chinese",
                 "header_image": "https://cdn.akamai.steamstatic.com/steam/apps/2449040/header.jpg?t=1699269524", "capsule_image": "https://cdn.akamai.steamstatic.com/steam/apps/2449040/capsule_231x87.jpg?t=1699269524",
                 "capsule_imagev5": "https://cdn.akamai.steamstatic.com/steam/apps/2449040/capsule_184x69.jpg?t=1699269524",
                 "website": None,
                 "pc_requirements": {
-                    "minimum": "<strong>Minimum:</strong><br><ul class="bb_ul"><li>Requires a 64-bit processor and operating system<br></li><li><strong>OS:</strong> Windows 7<br></li><li><strong>Processor:</strong> Dual Core 2 GHz<br></li><li><strong>Memory:</strong> 1 GB RAM<br></li><li><strong>DirectX:</strong> Version 9.0<br></li><li><strong>Storage:</strong> 200 MB available space</li></ul>",
-                    "recommended": "<strong>Recommended:</strong><br><ul class="bb_ul"><li>Requires a 64-bit processor and operating system</li></ul>"
+                    "minimum": "<strong>Minimum:</strong><br><ul class='bb_ul'><li>Requires a 64-bit processor and operating system<br></li><li><strong>OS:</strong> Windows 7<br></li><li><strong>Processor:</strong> Dual Core 2 GHz<br></li><li><strong>Memory:</strong> 1 GB RAM<br></li><li><strong>DirectX:</strong> Version 9.0<br></li><li><strong>Storage:</strong> 200 MB available space</li></ul>",
+                    "recommended": "<strong>Recommended:</strong><br><ul class='bb_ul'><li>Requires a 64-bit processor and operating system</li></ul>"
                 }, 
                 "mac_requirements": {
-                    "minimum": "<strong>Minimum:</strong><br><ul class="bb_ul"></ul>", 
-                    "recommended": "<strong>Recommended:</strong><br><ul class="bb_ul"></ul>"
+                    "minimum": "<strong>Minimum:</strong><br><ul class='bb_ul'></ul>", 
+                    "recommended": "<strong>Recommended:</strong><br><ul class='bb_ul'></ul>"
                 },
                 "linux_requirements": {
-                    "minimum": "<strong>Minimum:</strong><br><ul class="bb_ul"></ul>", 
-                    "recommended": "<strong>Recommended:</strong><br><ul class="bb_ul"></ul>"
+                    "minimum": "<strong>Minimum:</strong><br><ul class='bb_ul'></ul>", 
+                    "recommended": "<strong>Recommended:</strong><br><ul class='bb_ul'></ul>"
                 },
                 "developers": ["RealPeach"], 
                 "publishers": ["RealPeach"], 
@@ -53,7 +52,7 @@
                                 "packageid": 881414, 
                                 "percent_savings_text": "-10% ", 
                                 "percent_savings": 0, 
-                                "option_text": "Cursorblade - <span class="discount_original_price">$4.99</span> $4.49", 
+                                "option_text": "Cursorblade - <span class='discount_original_price'>$4.99</span> $4.49", 
                                 "option_description": "", 
                                 "can_get_free_license": "0", 
                                 "is_free_license": False, 
