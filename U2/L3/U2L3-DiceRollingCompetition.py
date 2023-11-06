@@ -1,6 +1,9 @@
 import random
 import time
 
+# Welcome message. generates "border" around the message on runtime.
+print("".join(["-"*33, "\nWelcome to the Dice Rolling Game!\n", "-"*33]))
+
 # initialize the main variables to be used
 rounds = int(input("How many rounds do you want to play? "))
 player_points = 0
