@@ -27,8 +27,12 @@
                     "minimum": "<strong>Minimum:</strong><br><ul class='bb_ul'></ul>", 
                     "recommended": "<strong>Recommended:</strong><br><ul class='bb_ul'></ul>"
                 },
-                "developers": ["RealPeach"], 
-                "publishers": ["RealPeach"], 
+                "developers": [
+                    "RealPeach"
+                ], 
+                "publishers": [
+                    "RealPeach"
+                ], 
                 "price_overview": {
                     "currency": "USD", 
                     "initial": 499, 
@@ -37,7 +41,9 @@
                     "initial_formatted": "$4.99", 
                     "final_formatted": "$4.49"
                 }, 
-                "packages": [881414], 
+                "packages": [
+                    881414
+                ], 
                 "package_groups": [
                     {
                         "name": "default", 
