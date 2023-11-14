@@ -81,7 +81,7 @@ class Wishlister(QMainWindow):
         add_item_dialog = QDialog(self)
         add_item_dialog.setWindowTitle("Add Game")
         add_item_dialog.setGeometry(200, 200, 400, 100)
-        add_item_dialog.setFixedSize(400, 100)
+        add_item_dialog.setFixedSize(400, 200)
 
         add_item_layout = QVBoxLayout(add_item_dialog)
 
@@ -114,7 +114,7 @@ class Wishlister(QMainWindow):
         add_item_layout.addWidget(add_button)
         add_item_layout.addWidget(cancel_button)
 
-        add_item_dialog.exec_()
+        add_item_dialog.exec()
 
     def remove_item_ui(self):
         """
@@ -122,8 +122,8 @@ class Wishlister(QMainWindow):
         """
         remove_item_dialog = QDialog(self)
         remove_item_dialog.setWindowTitle("Remove Game")
-        remove_item_dialog.setGeometry(200, 200, 200, 300)
-        remove_item_dialog.setFixedSize(200, 300)
+        remove_item_dialog.setGeometry(200, 200, 200, 150)
+        remove_item_dialog.setFixedSize(200, 150)
 
         remove_item_layout = QVBoxLayout(remove_item_dialog)
 
@@ -151,7 +151,7 @@ class Wishlister(QMainWindow):
         remove_item_layout.addWidget(ok_button)
         remove_item_layout.addWidget(cancel_button)
 
-        remove_item_dialog.exec_()
+        remove_item_dialog.exec()
 
     def insert_item_ui(self):
         """
@@ -160,7 +160,7 @@ class Wishlister(QMainWindow):
         insert_item_dialog = QDialog(self)
         insert_item_dialog.setWindowTitle("Insert Game")
         insert_item_dialog.setGeometry(200, 200, 400, 150)
-        insert_item_dialog.setFixedSize(400, 150)
+        insert_item_dialog.setFixedSize(400, 200)
 
         insert_item_layout = QVBoxLayout(insert_item_dialog)
 
@@ -201,7 +201,7 @@ class Wishlister(QMainWindow):
         insert_item_layout.addWidget(ok_button)
         insert_item_layout.addWidget(cancel_button)
 
-        insert_item_dialog.exec_()
+        insert_item_dialog.exec()
 
     def swap_items_ui(self):
         """
@@ -209,8 +209,8 @@ class Wishlister(QMainWindow):
         """
         swap_items_dialog = QDialog(self)
         swap_items_dialog.setWindowTitle("Swap Games")
-        swap_items_dialog.setGeometry(200, 200, 310, 150)
-        swap_items_dialog.setFixedSize(310, 150)
+        swap_items_dialog.setGeometry(200, 200, 310, 200)
+        swap_items_dialog.setFixedSize(310, 200)
 
         swap_items_layout = QVBoxLayout(swap_items_dialog)
 
@@ -250,7 +250,7 @@ class Wishlister(QMainWindow):
         swap_items_layout.addWidget(ok_button)
         swap_items_layout.addWidget(cancel_button)
 
-        swap_items_dialog.exec_()
+        swap_items_dialog.exec()
 
     def shuffle_items_ui(self):
         """
@@ -457,4 +457,4 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = Wishlister()
     window.show()
-    sys.exit(app.exec_())
+    sys.exit(app.exec())
