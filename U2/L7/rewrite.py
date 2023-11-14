@@ -1,5 +1,10 @@
 """
 A GUI application for managing a wishlist of Steam games, written in Python 3.12.0.
+
+Theres also the replit version (https://replit.com/@Marcus5408/wishlisterer) but
+tkinter kind of sucks on replit and it cuts off the buttons so i guess just copy
+and paste from github (https://github.com/Marcus5408/AP-CSP/blob/main/U2/L7/rewrite.py)
+and run it locally.
 """
 import tkinter as tk
 from tkinter import ttk, messagebox
