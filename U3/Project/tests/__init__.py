@@ -35,9 +35,14 @@
 # t1_letter = "D"
 # t1_guessed_new = update_guessed_letters(t1_word, t1_guessed, t1_letter)
 # print(t1_guessed_new)
-# 
+
 # t1_word = ["B", "I", "Y", "O", "O"]
 # t1_guessed = ["__", "__", "Y", "__", "__"]
 # t1_letter = "O"
 # t1_guessed_new = update_guessed_letters(t1_word, t1_guessed, t1_letter)
 # print(t1_guessed_new)
+
+# test1 = ["B", "I", "H", "Y", "U", "N", "G"]
+# test2 = ["D", "__", "K", "K", "A", "__", "B", "I"]
+# print(is_word_guessed(test1))
+# print(is_word_guessed(test2))

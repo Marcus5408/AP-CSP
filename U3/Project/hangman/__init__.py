@@ -1,6 +1,13 @@
 import random
 import json
+from re import M
 from typing import List, Type, Union
+from colorama import init, Fore
+from matplotlib import use
+
+# initialize colorama
+init()
+RED, YELLOW, GREEN, BLUE, RESET = Fore.RED, Fore.YELLOW, Fore.GREEN, Fore.BLUE, Fore.RESET
 
 
 class HangmanHung(Exception):
@@ -58,7 +65,7 @@ def create_guessed_letter_list(secret_word_list: list) -> list:
 
 def print_guessed_letters(guessed_letters: list or str) -> None:
     for letter in guessed_letters:
-        print(letter, end=" ") 
+        print(letter, end=" ")
     print()
 
 
@@ -84,7 +91,7 @@ def update_guessed_letters(secret_word_list: list, guessed_letters: list, letter
         raise TypeError("letter must be a string")
     if len(letter) != 1:
         raise ValueError("letter must be a single character")
-    
+
     # actual function
     for index, secret_letter in enumerate(secret_word_list):
         if secret_letter == letter:
@@ -93,20 +100,49 @@ def update_guessed_letters(secret_word_list: list, guessed_letters: list, letter
     return guessed_letters
 
 
-def is_word_guessed(guessed_letters):
-    return 0
-
-# past tests are in tests/__init__.py
-
-t1_word = ["B", "I", "Y", "O", "O"]
-t1_guessed = ["__", "__", "Y", "__", "__"]
-t1_letter = "O"
-t1_guessed_new = update_guessed_letters(t1_word, t1_guessed, t1_letter)
-print(t1_guessed_new)
+def is_word_guessed(guessed_letters: list) -> bool:
+    return "__" not in guessed_letters
 
 
-# if __name__ == "__main__":
-#     chosen_secret_word = pick_secret_word("People", "Easy")
-# 
-#     print(f"Secret word is {chosen_secret_word}")
-#     print(create_secret_word_list(chosen_secret_word))
+def show_menu(options: dict) -> int:
+    # check if options is a dictionary
+    if not isinstance(options, dict):
+        raise TypeError("options must be a dictionary")
+
+    # print menu
+    for option, menu_item in options.items():
+        print(f"{GREEN}[{option}] {BLUE}{menu_item}")
+
+    # get user input
+    user_input = None
+    while True:
+        if user_input in options:
+            break
+        user_input = input(f"{YELLOW}Please enter an option: {RESET}")
+
+    return user_input
+
+
+# tests are in tests/__init__.py
+if __name__ == "__main__":
+    with open(f"{__file__.replace("__init__.py", "")}ascii_art.txt", "r", encoding="utf-8") as f:
+        ascii_art = f.read()
+        print(f"{RED}{ascii_art}")
+
+    print(f"{YELLOW}{'-' * 13} Welcome to Hangman! {'-' * 13}")
+    print("The hangman is currently alive and well.")
+    main_menu = {
+        "1": "Play Hangman",
+        "2": "Options",
+        "3": "Exit"
+    }
+    for option, menu_item in main_menu.items():
+        print(f"{GREEN}[{option}] {BLUE}{menu_item}")
+    
+    user_input = None
+    while True:
+        if user_input in main_menu:
+            break
+        user_input = input(f"{YELLOW}Please enter an option: {RESET}")
+
+    chosen_secret_word = pick_secret_word("People", "Easy")
