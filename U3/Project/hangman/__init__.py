@@ -1,21 +1,12 @@
 import random
 import json
-from re import M
 from typing import List, Type, Union
 from colorama import init, Fore
-from matplotlib import use
 
 # initialize colorama
 init()
 RED, YELLOW, GREEN, BLUE, RESET = Fore.RED, Fore.YELLOW, Fore.GREEN, Fore.BLUE, Fore.RESET
-
-
-class HangmanHung(Exception):
-    # custom exception for when the hangman is hung due to user error
-    def __init__(self, message):
-        self.message = message
-        super().__init__(self.message)
-
+CYAN = Fore.CYAN
 
 def validate_input(input_to_check: any, valid_inputs: Union[type, List[Type], List[str]]) -> None:
     # check if input is a valid type
@@ -40,14 +31,22 @@ def pick_secret_word(category: str = "none", difficulty: str = "none") -> str:
 
     # make sure the category & difficulty is valid
     valid_categories = [category_words["category"].lower() for index, category_words in enumerate(words)]
-    valid_categories.append("none")  # allow for "random" category
+    valid_categories.append("random")  # allow for "random" category
     if category not in valid_categories:
-        raise HangmanHung("You entered an invalid category. The hangman has been sent to the gallows.")
-    if difficulty not in ["easy", "medium", "hard"]:
-        raise HangmanHung("You entered an invalid difficulty. The hangman has been sent to the gallows.")
+        print(f"{RED}You entered an invalid category. The hangman has been sent to the gallows.")
+    if difficulty not in ["easy", "medium", "hard", "random"]:
+        print(f"{RED}You entered an invalid difficulty. The hangman has been sent to the gallows.")
 
     # if all is well, pick a word
+    if category == "random":
+        valid_categories.remove("random")
+        category = random.choice(valid_categories)
+
+    if difficulty == "random":
+        difficulty = random.choice(["easy", "medium", "hard"])
+
     words = words[valid_categories.index(category)]["words"][difficulty]
+
     return random.choice(words).upper()
 
 
@@ -110,21 +109,19 @@ def show_menu(options: dict) -> int:
         raise TypeError("options must be a dictionary")
 
     # print menu
-    for option, menu_item in options.items():
-        print(f"{GREEN}[{option}] {BLUE}{menu_item}")
+    for number, option_name in options.items():
+        print(f"{GREEN}[{number}] {BLUE}{option_name}")
 
     # get user input
-    user_input = None
-    while True:
-        if user_input in options:
-            break
-        user_input = input(f"{YELLOW}Please enter an option: {RESET}")
+    selection = ""
+    while selection not in options or selection == "":
+        selection = input(f"{YELLOW}Please enter an option: {RESET}")
+    selection = 1 if selection == "" else selection
 
-    return user_input
+    return selection
 
 
-# tests are in tests/__init__.py
-if __name__ == "__main__":
+def show_main_menu() -> int:
     with open(f"{__file__.replace("__init__.py", "")}ascii_art.txt", "r", encoding="utf-8") as f:
         ascii_art = f.read()
         print(f"{RED}{ascii_art}")
@@ -133,16 +130,82 @@ if __name__ == "__main__":
     print("The hangman is currently alive and well.")
     main_menu = {
         "1": "Play Hangman",
-        "2": "Options",
+        "2": "Game Options",
         "3": "Exit"
     }
-    for option, menu_item in main_menu.items():
-        print(f"{GREEN}[{option}] {BLUE}{menu_item}")
-    
-    user_input = None
-    while True:
-        if user_input in main_menu:
+    selection = show_menu(main_menu)
+    selection = 1 if selection == "" else int(selection)
+
+    return selection
+
+
+def play_hangman(settings: dict) -> None:
+    print("Starting game...")
+    hangman = 0
+    lives = settings["lives"]
+    secret_word = pick_secret_word(settings["category"], settings["difficulty"])
+    secret_word_list = create_secret_word_list(secret_word)
+    guessed_letters = create_guessed_letter_list(secret_word_list)
+    wrong_guesses = []
+    correctly_guessed = False
+    while hangman < lives:
+        print(f"{CYAN}The hangman has {BLUE}{lives - hangman}{CYAN} chances left.\n{GREEN}")
+        print_guessed_letters(guessed_letters)
+        print(f"\r{RED}Wrong guesses: {' '.join(wrong_guesses)}", flush=True)
+        letter = input(f"{YELLOW}Please enter a letter: {RESET}").upper()
+        if check_letter(secret_word_list, letter):
+            update_guessed_letters(secret_word_list, guessed_letters, letter)
+        else:
+            wrong_guesses.append(letter.upper())
+            hangman += 1
+
+        print("\r\033[A" * 5, end="", flush=True)  # move cursor up 5 lines, clear lines
+        if is_word_guessed(guessed_letters):
+            print(f"{GREEN}You guessed the word correctly!")
+            correctly_guessed = True
             break
-        user_input = input(f"{YELLOW}Please enter an option: {RESET}")
+    
+    if not correctly_guessed:
+        print(f"{RED}The hangman's specter claims another soul in the void of your defeat.")
+        print(f"The elusive word you sought to unveil was {secret_word}.{RESET}")
+
+
+def configure_game_settings() -> dict:
+    print("Game Options")
+    settings_menu = {
+        "1": "Category",
+        "2": "Difficulty",
+        "3": "Lives",
+        "4": "Go Back"
+    }
+    while True:
+        selection = show_menu(settings_menu)
+        print("\r\033[A" * 5, end="", flush=True)
+        if selection == 1:
+            # multiple choice
+
+        if selection == 4:
+            break
+
+    return None
+
+
+# tests are in tests/__init__.py
+if __name__ == "__main__":
+    game_settings = {
+        "category": "random",
+        "difficulty": "random",
+        "lives": 6
+    }
+    while True:
+        main_menu_selection = show_main_menu()
+        if main_menu_selection == 1:
+            play_hangman(game_settings)
+        elif main_menu_selection == 2:
+            configure_game_settings()
+        else:
+            print(f"{YELLOW}Goodbye!")
+            exit()
+
 
     chosen_secret_word = pick_secret_word("People", "Easy")
