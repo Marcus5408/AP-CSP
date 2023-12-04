@@ -1,236 +1,86 @@
 [
-	{
-		"category": "People",
-		"words": {
-			"easy": [
-				"Man",
-				"Boy",
-				"God",
-				"Girl",
-				"Woman"
-			],
-			"medium": [
-				"Child",
-				"Chief",
-				"Chisel",
-				"Chess",
-				"Family"
-			],
-			"hard": [
-				"Hieroglyph",
-				"Horoscope",
-				"Hieroglyph",
-				"Highway",
-				"Surveyor"
-			]
-		}
-	},
-	{
-		"category": "Transportation",
-		"words": {
-			"easy": [
-				"Car",
-				"Jet",
-				"Bus",
-				"Taxi",
-				"Van"
-			],
-			"medium": [
-				"Cycle",
-				"Drill",
-				"Rocket",
-				"Shuttle",
-				"Train"
-			],
-			"hard": [
-				"Aeroplane",
-				"Airforce",
-				"Freeway",
-				"Spaceship",
-				"Treadmill"
-			]
-		}
-	},
-	{
-		"category": "Nature",
-		"words": {
-			"easy": [
-				"Sun",
-				"Tree",
-				"Sky",
-				"Sea",
-				"Mist"
-			],
-			"medium": [
-				"Earth",
-				"Flower",
-				"Fungus",
-				"Garden",
-				"Insect"
-			],
-			"hard": [
-				"Rainbow",
-				"Meteor",
-				"Mountain",
-				"Tornado",
-				"Waterfall"
-			]
-		}
-	},
-	{
-		"category": "Animals",
-		"words": {
-			"easy": [
-				"Dog",
-				"Cat",
-				"Bat",
-				"Ant",
-				"Cow"
-			],
-			"medium": [
-				"Elephant",
-				"Giraffe",
-				"Lion",
-				"Tiger",
-				"Zebra"
-			],
-			"hard": [
-				"Mosquito",
-				"Vulture",
-				"Salamander",
-				"Platypus",
-				"Chameleon"
-			]
-		}
-	},
-	{
-		"category": "Food",
-		"words": {
-			"easy": [
-				"Apple",
-				"Banana",
-				"Egg",
-				"Milk",
-				"Meat"
-			],
-			"medium": [
-				"Carrot",
-				"Cherry",
-				"Onion",
-				"Pepper",
-				"Potato"
-			],
-			"hard": [
-				"Cappuccino",
-				"Barbecue",
-				"Milkshake",
-				"Sandwich",
-				"Watermelon"
-			]
-		}
-	},
-	{
-		"category": "Sports",
-		"words": {
-			"easy": [
-				"Run",
-				"Swim",
-				"Ski",
-				"Golf",
-				"Box"
-			],
-			"medium": [
-				"Tennis",
-				"Soccer",
-				"Hockey",
-				"Cycling",
-				"Chess"
-			],
-			"hard": [
-				"Paragliding",
-				"Bungee",
-				"Biathlon",
-				"Triathlon",
-				"Skateboarding"
-			]
-		}
-	},
-	{
-		"category": "Technology",
-		"words": {
-			"easy": [
-				"Web",
-				"Car",
-				"Fan",
-				"Robot",
-				"Game"
-			],
-			"medium": [
-				"Computer",
-				"Database",
-				"Software",
-				"Hardware",
-				"Printer"
-			],
-			"hard": [
-				"Telecommunication",
-				"Cybersecurity",
-				"Blockchain",
-				"Artificial Intelligence",
-				"Quantum Computing"
-			]
-		}
-	},
-	{
-		"category": "Objects",
-		"words": {
-			"easy": [
-				"Box",
-				"Hat",
-				"Bed",
-				"Car",
-				"Fan"
-			],
-			"medium": [
-				"Album",
-				"Balloon",
-				"Bottle",
-				"Chocolates",
-				"Crystal"
-			],
-			"hard": [
-				"Kaleidoscope",
-				"Perfume",
-				"Satellite",
-				"Telescope",
-				"Tapestry"
-			]
-		}
-	},
-	{
-		"category": "Miscellaneous",
-		"words": {
-			"easy": [
-				"Arm",
-				"Leg",
-				"Eye",
-				"Ear",
-				"Nose"
-			],
-			"medium": [
-				"Bridge",
-				"Brain",
-				"Circle",
-				"Clock",
-				"Lamp"
-			],
-			"hard": [
-				"Kaleidoscope",
-				"Perfume",
-				"Satellite",
-				"Telescope",
-				"Tapestry"
-			]
-		}
-	}
+  {
+    "category": "People",
+    "words": {
+      "easy": ["Man", "Boy", "God", "Girl", "Woman"],
+      "medium": ["Child", "Chief", "Chisel", "Chess", "Family"],
+      "hard": ["Hieroglyph", "Horoscope", "Hieroglyph", "Highway", "Surveyor"]
+    }
+  },
+  {
+    "category": "Transportation",
+    "words": {
+      "easy": ["Car", "Jet", "Bus", "Taxi", "Van"],
+      "medium": ["Cycle", "Drill", "Rocket", "Shuttle", "Train"],
+      "hard": ["Aeroplane", "Airforce", "Freeway", "Spaceship", "Treadmill"]
+    }
+  },
+  {
+    "category": "Nature",
+    "words": {
+      "easy": ["Sun", "Tree", "Sky", "Sea", "Mist"],
+      "medium": ["Earth", "Flower", "Fungus", "Garden", "Insect"],
+      "hard": ["Rainbow", "Meteor", "Mountain", "Tornado", "Waterfall"]
+    }
+  },
+  {
+    "category": "Animals",
+    "words": {
+      "easy": ["Dog", "Cat", "Bat", "Ant", "Cow"],
+      "medium": ["Elephant", "Giraffe", "Lion", "Tiger", "Zebra"],
+      "hard": ["Mosquito", "Vulture", "Salamander", "Platypus", "Chameleon"]
+    }
+  },
+  {
+    "category": "Food",
+    "words": {
+      "easy": ["Apple", "Banana", "Egg", "Milk", "Meat"],
+      "medium": ["Carrot", "Cherry", "Onion", "Pepper", "Potato"],
+      "hard": ["Cappuccino", "Barbecue", "Milkshake", "Sandwich", "Watermelon"]
+    }
+  },
+  {
+    "category": "Sports",
+    "words": {
+      "easy": ["Run", "Swim", "Ski", "Golf", "Box"],
+      "medium": ["Tennis", "Soccer", "Hockey", "Cycling", "Chess"],
+      "hard": [
+        "Paragliding",
+        "Bungee",
+        "Biathlon",
+        "Triathlon",
+        "Skateboarding"
+      ]
+    }
+  },
+  {
+    "category": "Technology",
+    "words": {
+      "easy": ["Web", "Car", "Fan", "Robot", "Game"],
+      "medium": ["Computer", "Database", "Software", "Hardware", "Printer"],
+      "hard": [
+        "Telecommunication",
+        "Cybersecurity",
+        "Blockchain",
+        "Artificial Intelligence",
+        "Quantum Computing"
+      ]
+    }
+  },
+  {
+    "category": "Objects",
+    "words": {
+      "easy": ["Box", "Hat", "Bed", "Car", "Fan"],
+      "medium": ["Album", "Balloon", "Bottle", "Chocolates", "Crystal"],
+      "hard": ["Kaleidoscope", "Perfume", "Satellite", "Telescope", "Tapestry"]
+    }
+  },
+  {
+    "category": "Miscellaneous",
+    "words": {
+      "easy": ["Arm", "Leg", "Eye", "Ear", "Nose"],
+      "medium": ["Bridge", "Brain", "Circle", "Clock", "Lamp"],
+      "hard": ["Kaleidoscope", "Perfume", "Satellite", "Telescope", "Tapestry"]
+    }
+  }
 ]
