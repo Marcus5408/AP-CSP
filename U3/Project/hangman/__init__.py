@@ -307,6 +307,7 @@ if __name__ == "__main__":
     while True:
         main_menu_selection, invalid_choices = show_main_menu()
         lines_to_clear += invalid_choices
+        lines_to_clear += 2 if previous_state == "hangman_game" else 0
         clear_previous_lines(lines_to_clear)
         lines_to_clear = 0
         if main_menu_selection == 1:
