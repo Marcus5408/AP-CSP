@@ -1,25 +1,45 @@
+from ast import main
+from math import e
+from operator import inv, le
 import random
 import json
 from typing import List, Type, Union
-from colorama import init, Fore
+from colorama import init, Fore, just_fix_windows_console
+from matplotlib import lines
 
-# initialize colorama
+# initialize colorama and various text formatting things
 init()
+just_fix_windows_console()
 RED, YELLOW, GREEN, BLUE, RESET = Fore.RED, Fore.YELLOW, Fore.GREEN, Fore.BLUE, Fore.RESET
-CYAN = Fore.CYAN
+MAGENTA, CYAN, WHITE = Fore.MAGENTA, Fore.CYAN, Fore.WHITE
+CLEARLINE = "\033[2K"  # clears the current line
 
-def validate_input(input_to_check: any, valid_inputs: Union[type, List[Type], List[str]]) -> None:
-    # check if input is a valid type
-    if valid_inputs is List[Type]:
-        valid_input = False
+
+def clear_previous_lines(num_lines_to_clear: int) -> None:
+    if num_lines_to_clear == 0:
+        return
+
+    for _ in range(num_lines_to_clear):
+        print(f"{CLEARLINE}\033[F", end=CLEARLINE, flush=True)
+        # \033[F moves the cursor to the beginning of the previous line
+
+
+def validate_input(input_to_check: any, valid_inputs: Union[type, List[Type], List[str]] = any,
+                   raise_error: bool = False, input_name: str = "input") -> bool:
+    # check if input is a valid type.
+    valid_input = False
+    if valid_inputs is Union[type, List[Type], List[str]]:
         for valid_type in valid_inputs:
             if isinstance(input_to_check, valid_type):
                 valid_input = True
-        if not valid_input:
-            raise TypeError(f"input must be one of the following types: {valid_inputs}")
+                break
+        if not valid_input and raise_error:
+            raise TypeError(f"{input_name} must be one of the following types: {valid_inputs}")
     else:
-        if not isinstance(input_to_check, valid_inputs):
-            raise TypeError(f"input must be one of the following types: {valid_inputs}")
+        if not isinstance(input_to_check, valid_inputs) and raise_error:
+            raise TypeError(f"{input_name} must be one of the following types: {valid_inputs}")
+
+    return valid_input
 
 
 def pick_secret_word(category: str = "none", difficulty: str = "none") -> str:
@@ -30,7 +50,7 @@ def pick_secret_word(category: str = "none", difficulty: str = "none") -> str:
     difficulty = difficulty.lower()
 
     # make sure the category & difficulty is valid
-    valid_categories = [category_words["category"].lower() for index, category_words in enumerate(words)]
+    valid_categories = [category_words["category"].lower() for category_words in words]
     valid_categories.append("random")  # allow for "random" category
     if category not in valid_categories:
         print(f"{RED}You entered an invalid category. The hangman has been sent to the gallows.")
@@ -51,14 +71,12 @@ def pick_secret_word(category: str = "none", difficulty: str = "none") -> str:
 
 
 def create_secret_word_list(secret_word: str) -> list:
-    if not isinstance(secret_word, str):
-        raise TypeError("secret_word must be a string")
+    validate_input(secret_word, str, True, "secret_word")
     return list(secret_word.upper())
 
 
 def create_guessed_letter_list(secret_word_list: list) -> list:
-    if not isinstance(secret_word_list, list):
-        raise TypeError("secret_word_list must be a list")
+    validate_input(secret_word_list, list, True, "secret_word_list")
     return ["__" for _ in secret_word_list]
 
 
@@ -70,26 +88,20 @@ def print_guessed_letters(guessed_letters: list or str) -> None:
 
 def check_letter(secret_word_list: list, letter: str) -> bool:
     # check if secret_word_list is a list of letters
-    if not isinstance(secret_word_list, list):
-        raise TypeError("secret_word_list must be a list")
+    validate_input(secret_word_list, list, raise_error=True, input_name="secret_word_list")
     # check if letter is a string and is only one character
-    if not isinstance(letter, str):
-        raise TypeError("letter must be a string")
+    validate_input(letter, str, raise_error=True, input_name="letter")
     if len(letter) != 1:
-        raise ValueError("letter must be a single character")
+        return False
 
     return letter in secret_word_list
 
 
 def update_guessed_letters(secret_word_list: list, guessed_letters: list, letter: str) -> list:
     # check list inputs are valid
-    validate_input(secret_word_list, list)
-    validate_input(guessed_letters, list)
-    # check if letter is a string and is only one character
-    if not isinstance(letter, str):
-        raise TypeError("letter must be a string")
-    if len(letter) != 1:
-        raise ValueError("letter must be a single character")
+    validate_input(secret_word_list, list, raise_error=True, input_name="secret_word_list")
+    validate_input(guessed_letters, list, raise_error=True, input_name="guessed_letters")
+    validate_input(letter, str, raise_error=True, input_name="letter")
 
     # actual function
     for index, secret_letter in enumerate(secret_word_list):
@@ -104,108 +116,245 @@ def is_word_guessed(guessed_letters: list) -> bool:
 
 
 def show_menu(options: dict) -> int:
-    # check if options is a dictionary
-    if not isinstance(options, dict):
-        raise TypeError("options must be a dictionary")
+    # validate inputs
+    validate_input(options, dict, raise_error=True, input_name="options")
 
     # print menu
     for number, option_name in options.items():
-        print(f"{GREEN}[{number}] {BLUE}{option_name}")
+        print(f"{GREEN}[{number}] {BLUE}{option_name}{' ' * 15}", flush=True)
 
     # get user input
     selection = ""
+    invalid_inputs = 0
     while selection not in options or selection == "":
-        selection = input(f"{YELLOW}Please enter an option: {RESET}")
-    selection = 1 if selection == "" else selection
+        selection = input(f"{CYAN}Please enter an option: {RESET}")
+        invalid_inputs += 1 if selection not in options else 0
+    selection = 1 if selection == "" else int(selection)
 
-    return selection
+    return selection, invalid_inputs
 
 
 def show_main_menu() -> int:
-    with open(f"{__file__.replace("__init__.py", "")}ascii_art.txt", "r", encoding="utf-8") as f:
-        ascii_art = f.read()
-        print(f"{RED}{ascii_art}")
-
-    print(f"{YELLOW}{'-' * 13} Welcome to Hangman! {'-' * 13}")
-    print("The hangman is currently alive and well.")
+    print(f"{CLEARLINE}{MAGENTA}Main Menu")
     main_menu = {
         "1": "Play Hangman",
         "2": "Game Options",
         "3": "Exit"
     }
-    selection = show_menu(main_menu)
+    selection, invalids = show_menu(main_menu)
     selection = 1 if selection == "" else int(selection)
 
-    return selection
+    return selection, invalids
 
 
-def play_hangman(settings: dict) -> None:
-    print("Starting game...")
-    hangman = 0
-    lives = settings["lives"]
+def play_hangman(settings: dict, program_state:str) -> bool:
+    if program_state == "main_menu":
+        clear_previous_lines(5)
+    elif program_state == "settings_menu":
+        clear_previous_lines(0)
+
+    print(f"{MAGENTA}Hangman Game")
+    hangman_life = settings["lives"]
     secret_word = pick_secret_word(settings["category"], settings["difficulty"])
     secret_word_list = create_secret_word_list(secret_word)
     guessed_letters = create_guessed_letter_list(secret_word_list)
     wrong_guesses = []
     correctly_guessed = False
-    while hangman < lives:
-        print(f"{CYAN}The hangman has {BLUE}{lives - hangman}{CYAN} chances left.\n{GREEN}")
+    while hangman_life != 0:
+        print(f"{CYAN}The hangman has {BLUE}{hangman_life}{CYAN} chances left.\n{GREEN}")
         print_guessed_letters(guessed_letters)
-        print(f"\r{RED}Wrong guesses: {' '.join(wrong_guesses)}", flush=True)
-        letter = input(f"{YELLOW}Please enter a letter: {RESET}").upper()
-        if check_letter(secret_word_list, letter):
-            update_guessed_letters(secret_word_list, guessed_letters, letter)
-        else:
-            wrong_guesses.append(letter.upper())
-            hangman += 1
 
-        print("\r\033[A" * 5, end="", flush=True)  # move cursor up 5 lines, clear lines
+        # format wrong guesses and print them
+        print(f"\r{RED}Wrong guesses: ")
+        wrong_guesses_total_len = sum([len(wrong_guess) for wrong_guess in wrong_guesses])
+        beginning_and_ending = f"+{'-' * (wrong_guesses_total_len * 2 + 2)}+"
+        formatted_wrong_guesses = (" ".join(wrong_guesses) + " ") if len(wrong_guesses) > 0 else ""
+        print(f"{beginning_and_ending}\n| {formatted_wrong_guesses} |\n{beginning_and_ending}")
+
+        # game logic, see if user guesses correctly
+        guess = input(f"{CYAN}Please enter a letter: {RESET}").upper()
+        if len(guess) == 1:
+            if check_letter(secret_word_list, guess):
+                update_guessed_letters(secret_word_list, guessed_letters, guess)
+            else:
+                wrong_guesses.append(guess.upper())
+                hangman_life -= 1
+        else:
+            for letter in guess:
+                if check_letter(secret_word_list, letter):
+                    update_guessed_letters(secret_word_list, guessed_letters, letter)
+                else:
+                    wrong_guesses.append(letter.upper())
+                    hangman_life -= 1
+
+        clear_previous_lines(8)  # move cursor up 5 lines, clear lines
         if is_word_guessed(guessed_letters):
             print(f"{GREEN}You guessed the word correctly!")
             correctly_guessed = True
             break
-    
+
     if not correctly_guessed:
         print(f"{RED}The hangman's specter claims another soul in the void of your defeat.")
         print(f"The elusive word you sought to unveil was {secret_word}.{RESET}")
 
+    return correctly_guessed
 
-def configure_game_settings() -> dict:
-    print("Game Options")
+
+def configure_game_settings(settings: dict, program_mode:str) -> dict:
+    clear_previous_lines(5 if program_mode == "main_menu" else 0)
     settings_menu = {
         "1": "Category",
         "2": "Difficulty",
         "3": "Lives",
-        "4": "Go Back"
+        "4": "Reset Settings",
+        "5": "Show Settings",
+        "6": "Go Back"
     }
     while True:
-        selection = show_menu(settings_menu)
-        print("\r\033[A" * 5, end="", flush=True)
+        print(f"{CLEARLINE}{MAGENTA}Game Options")
+        selection, lines_to_replace = show_menu(settings_menu)
+        clear_previous_lines(8 + lines_to_replace)
         if selection == 1:
-            # multiple choice
+            print(f"{MAGENTA}Game Options - Category")
+            category_options = {}
 
-        if selection == 4:
-            break
+            # get possible categories
+            words_json = f"{__file__.replace("__init__.py", "")}words.json"
+            with open(words_json, "r", encoding="utf-8") as words_file:
+                words = json.load(words_file)
+            for index, category_words in enumerate(words):
+                category_options[str(index + 1)] = category_words["category"]
+            category_options[str(len(words) + 1)] = "Random"  # allow for "random" category
+            category_options[str(len(words) + 2)] = "Go back to Game Options"  # add go back option
 
-    return None
+            # show menu, update settings if updated
+            selection, lines_to_replace = show_menu(category_options)
+            if selection <= (len(words) + 1):
+                settings["category"] = category_options[str(selection)]
+                print(f"{GREEN}Category set to {BLUE}{settings['category']}{GREEN}.")
+            else:
+                print(f"{GREEN}Category not changed ({BLUE}{settings['category']}{GREEN}).")
+            
+            input(f"{YELLOW}Press enter to go back to the settings menu.")
+            clear_previous_lines(len(category_options) + 4 + lines_to_replace)
+        elif selection == 2:
+            print(f"{MAGENTA}Game Options - Difficulty")
+            difficulty_options = {
+                "1": "Easy",
+                "2": "Medium",
+                "3": "Hard",
+                "4": "Random",
+                "5": "Go Back to Game Options"
+            }
+            selection, lines_to_replace = show_menu(difficulty_options)
+            if selection <= 4:
+                settings["difficulty"] = difficulty_options[str(selection)]
+                print(f"{GREEN}Difficulty set to {BLUE}{settings['difficulty']}{GREEN}.")
+            else:
+                print(f"{GREEN}Difficulty not changed ({BLUE}{settings['difficulty']}{GREEN}).")
+
+            input(f"{YELLOW}Press enter to go back to the settings menu.")
+            clear_previous_lines(len(difficulty_options) + 4 + lines_to_replace)
+        elif selection == 3:
+            print(f"{MAGENTA}Game Options - Lives")
+            lives_options = {
+                "1": "Enter a number of lives",
+                "2": "Reset to default (6)",
+                "3": "Go back to Game Options"
+            }
+            selection, lines_to_replace = show_menu(lives_options)
+            if selection == 1:
+                lives_input = ""
+                while not lives_input.isdigit():
+                    lives_input = input(f"{CYAN}Please enter a number of lives: {RESET}")
+                    lines_to_replace += 1 if not lives_input.isdigit() else 0
+
+                settings["lives"] = lives_input
+                print(f"{GREEN}Lives set to {BLUE}{settings['lives']}{GREEN}.")
+            elif selection == 2:
+                settings["lives"] = 6
+                print(f"{GREEN}Lives reset to {BLUE}6{GREEN}.")
+            else:
+                print(f"{GREEN}Lives not changed ({BLUE}{settings['lives']}{GREEN}).")
+
+            input(f"{YELLOW}Press enter to go back to the settings menu.")
+            clear_previous_lines(len(lives_options) + 5 + lines_to_replace)
+        elif selection == 4:
+            print(f"{MAGENTA}Game Options - Reset Settings")
+            reset_options = {
+                "1": "Reset all settings",
+                "2": "Reset category",
+                "3": "Reset difficulty",
+                "4": "Reset lives",
+                "5": "Go back to Game Options"
+            }
+            selection, lines_to_replace = show_menu(reset_options)
+            if selection == 1:
+                settings["category"] = "random"
+                settings["difficulty"] = "random"
+                settings["lives"] = 6
+                print(f"{GREEN}All settings reset to default:")
+                print(f"Category: {BLUE}Random{GREEN}")
+                print(f"Difficulty: {BLUE}Random{GREEN}")
+                print(f"Lives: {BLUE}Random{GREEN}")
+                lines_to_replace += 3
+            elif selection == 2:
+                settings["category"] = "random"
+                print(f"{GREEN}Category reset to default {BLUE}Random{GREEN}.")
+            elif selection == 3:
+                settings["difficulty"] = "random"
+                print(f"{GREEN}Difficulty reset to default {BLUE}Random{GREEN}.")
+            elif selection == 4:
+                settings["lives"] = 6
+                print(f"{GREEN}Lives reset to default {BLUE}6{GREEN}.")
+            else:
+                print(f"{GREEN}Settings not changed.")
+
+            input(f"{YELLOW}Press enter to go back to the settings menu.")
+            clear_previous_lines(len(reset_options) + 4 + lines_to_replace)
+        elif selection == 5:
+            print(f"{MAGENTA}Game Options - Show Settings")
+            print(f"{GREEN}Current settings:")
+            print(f"Category: {BLUE}{settings['category']}{GREEN}")
+            print(f"Difficulty: {BLUE}{settings['difficulty']}{GREEN}")
+            print(f"Lives: {BLUE}{settings['lives']}{GREEN}")
+            input(f"{YELLOW}Press enter to go back to the settings menu.")
+            clear_previous_lines(6)
+        elif selection == 6:
+            return settings
 
 
 # tests are in tests/__init__.py
 if __name__ == "__main__":
-    game_settings = {
+    hangman_ascii = __file__.replace("__init__.py", "") + "hangman_ascii.txt"
+    with open(hangman_ascii, "r", encoding="utf-8") as f:
+        ascii_art = f.read()
+        print(f"{YELLOW}{ascii_art}")
+    del hangman_ascii, ascii_art
+    print(f"{'-' * 8} Hangman, but with more Python {'-' * 8}")
+    user_settings = {
         "category": "random",
         "difficulty": "random",
-        "lives": 6
+        "lives": 6,
     }
+    game_won = None
+    lines_to_clear = 0
+    previous_state = "main_menu"
     while True:
-        main_menu_selection = show_main_menu()
+        main_menu_selection, invalid_choices = show_main_menu()
+        lines_to_clear += invalid_choices
+        clear_previous_lines(lines_to_clear)
+        lines_to_clear = 0
         if main_menu_selection == 1:
-            play_hangman(game_settings)
+            game_won = play_hangman(user_settings, previous_state)
+            lines_to_clear += 5 if game_won else 6
+            previous_state = "hangman_game"
         elif main_menu_selection == 2:
-            configure_game_settings()
+            user_settings = configure_game_settings(user_settings, previous_state)
+            lines_to_clear += 5
+            main_menu_selection = 0
+            previous_state = "settings_menu"
         else:
             print(f"{YELLOW}Goodbye!")
             exit()
 
-
-    chosen_secret_word = pick_secret_word("People", "Easy")
