@@ -137,15 +137,22 @@ def play_hangman(settings: dict, program_state:str) -> bool:
             if check_letter(secret_word_list, guess):
                 update_guessed_letters(secret_word_list, guessed_letters, guess)
             else:
-                wrong_guesses.append(guess.upper())
-                hangman_life -= 1
+                if guess not in guessed_letters and guess not in wrong_guesses:
+                    wrong_guesses.append(guess.upper())
+                    hangman_life -= 1
         else:
+            letters_not_in_word = []
             for letter in guess:
                 if check_letter(secret_word_list, letter):
                     update_guessed_letters(secret_word_list, guessed_letters, letter)
                 else:
-                    wrong_guesses.append(letter.upper())
-                    hangman_life -= 1
+                    letters_not_in_word.append(letter)
+
+            if len(letters_not_in_word) != 0:
+                for letter in letters_not_in_word:
+                    if letter not in guessed_letters and letter not in wrong_guesses:
+                        wrong_guesses.append(letter.upper())
+                        hangman_life -= 1
 
         clear_previous_lines(8)  # move cursor up 5 lines, clear lines
         if is_word_guessed(guessed_letters):
@@ -238,7 +245,7 @@ def configure_game_settings(game_settings: dict, program_mode:str) -> dict:
                 print(f"{GREEN}Lives not changed ({BLUE}{game_settings['lives']}{GREEN}).")
 
             input(f"{YELLOW}Press enter to go back to the settings menu.")
-            clear_previous_lines(len(lives_options) + 5 + lines_to_clear)
+            clear_previous_lines(len(lives_options) + 4 + lines_to_clear)
         elif settings_selection == 4:
             print(f"{MAGENTA}Game Options - Reset Settings")
             reset_options = {
@@ -295,6 +302,11 @@ if __name__ == "__main__":
     user_settings = {
         "category": "random",
         "difficulty": "random",
+        "lives": 6,
+    }
+    user_settings = {
+        "category": "animals",
+        "difficulty": "easy",
         "lives": 6,
     }
     game_won = None
