@@ -24,24 +24,6 @@ def clear_previous_lines(num_lines_to_clear: int) -> None:
         # \033[F moves the cursor to the beginning of the previous line
 
 
-def validate_input(input_to_check: any, valid_inputs: Union[type, List[Type], List[str]] = any,
-                   raise_error: bool = False, input_name: str = "input") -> bool:
-    # check if input is a valid type.
-    valid_input = False
-    if valid_inputs is Union[type, List[Type], List[str]]:
-        for valid_type in valid_inputs:
-            if isinstance(input_to_check, valid_type):
-                valid_input = True
-                break
-        if not valid_input and raise_error:
-            raise TypeError(f"{input_name} must be one of the following types: {valid_inputs}")
-    else:
-        if not isinstance(input_to_check, valid_inputs) and raise_error:
-            raise TypeError(f"{input_name} must be one of the following types: {valid_inputs}")
-
-    return valid_input
-
-
 def pick_secret_word(category: str = "none", difficulty: str = "none") -> str:
     # get words from json, sanitize inputs
     with open(f"{__file__.replace("__init__.py", "")}words.json", "r", encoding="utf-8") as f:
@@ -71,12 +53,10 @@ def pick_secret_word(category: str = "none", difficulty: str = "none") -> str:
 
 
 def create_secret_word_list(secret_word: str) -> list:
-    validate_input(secret_word, str, True, "secret_word")
     return list(secret_word.upper())
 
 
 def create_guessed_letter_list(secret_word_list: list) -> list:
-    validate_input(secret_word_list, list, True, "secret_word_list")
     return ["__" for _ in secret_word_list]
 
 
@@ -87,23 +67,10 @@ def print_guessed_letters(guessed_letters: list or str) -> None:
 
 
 def check_letter(secret_word_list: list, letter: str) -> bool:
-    # check if secret_word_list is a list of letters
-    validate_input(secret_word_list, list, raise_error=True, input_name="secret_word_list")
-    # check if letter is a string and is only one character
-    validate_input(letter, str, raise_error=True, input_name="letter")
-    if len(letter) != 1:
-        return False
-
     return letter in secret_word_list
 
 
 def update_guessed_letters(secret_word_list: list, guessed_letters: list, letter: str) -> list:
-    # check list inputs are valid
-    validate_input(secret_word_list, list, raise_error=True, input_name="secret_word_list")
-    validate_input(guessed_letters, list, raise_error=True, input_name="guessed_letters")
-    validate_input(letter, str, raise_error=True, input_name="letter")
-
-    # actual function
     for index, secret_letter in enumerate(secret_word_list):
         if secret_letter == letter:
             guessed_letters[index] = letter
@@ -116,9 +83,6 @@ def is_word_guessed(guessed_letters: list) -> bool:
 
 
 def show_menu(options: dict) -> int:
-    # validate inputs
-    validate_input(options, dict, raise_error=True, input_name="options")
-
     # print menu
     for number, option_name in options.items():
         print(f"{GREEN}[{number}] {BLUE}{option_name}{' ' * 15}", flush=True)
@@ -357,4 +321,3 @@ if __name__ == "__main__":
         else:
             print(f"{YELLOW}Goodbye!")
             exit()
-
