@@ -53,7 +53,7 @@ def create_secret_word_list(secret_word: str) -> list:
 
 
 def create_guessed_letter_list(secret_word_list: list) -> list:
-    return ["__" for _ in secret_word_list]
+    return ["__" if _ != " " else "  " for _ in secret_word_list]
 
 
 def print_guessed_letters(guessed_letters: list or str) -> None:
@@ -113,14 +113,16 @@ def play_hangman(settings: dict, program_state:str) -> bool:
     elif program_state == "settings_menu":
         clear_previous_lines(0)
 
-    print(f"{MAGENTA}Hangman Game")
+    print(f"{MAGENTA}Hangman Game - {settings['category']}")
     hangman_life = settings["lives"]
     secret_word = pick_secret_word(settings["category"], settings["difficulty"])
     secret_word_list = create_secret_word_list(secret_word)
+    if " " in secret_word_list:
+        secret_word_list.remove(" ")
     guessed_letters = create_guessed_letter_list(secret_word_list)
     wrong_guesses = []
     correctly_guessed = False
-    while hangman_life != 0:
+    while hangman_life >= 0:
         print(f"{CYAN}The hangman has {BLUE}{hangman_life}{CYAN} chances left.\n{GREEN}")
         print_guessed_letters(guessed_letters)
 
@@ -232,6 +234,7 @@ def configure_game_settings(game_settings: dict, program_mode:str) -> dict:
             selection, lines_to_clear = show_menu(lives_options)
             if selection == 1:
                 lives_input = ""
+                lines_to_clear += 1
                 while not lives_input.isdigit():
                     lives_input = input(f"{CYAN}Please enter a number of lives: {RESET}")
                     lines_to_clear += 1 if not lives_input.isdigit() else 0
@@ -300,13 +303,8 @@ if __name__ == "__main__":
     del hangman_ascii, ascii_art
     print(f"{'-' * 8} Hangman, but with more Python {'-' * 8}")
     user_settings = {
-        "category": "random",
-        "difficulty": "random",
-        "lives": 6,
-    }
-    user_settings = {
-        "category": "animals",
-        "difficulty": "easy",
+        "category": "Random",
+        "difficulty": "Random",
         "lives": 6,
     }
     game_won = None
