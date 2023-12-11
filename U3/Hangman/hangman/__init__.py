@@ -122,7 +122,7 @@ def play_hangman(settings: dict, program_state:str) -> bool:
     guessed_letters = create_guessed_letter_list(secret_word_list)
     wrong_guesses = []
     correctly_guessed = False
-    while hangman_life >= 0:
+    while hangman_life > 0:
         print(f"{CYAN}The hangman has {BLUE}{hangman_life}{CYAN} chances left.\n{GREEN}")
         print_guessed_letters(guessed_letters)
 
