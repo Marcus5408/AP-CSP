@@ -239,7 +239,7 @@ def configure_game_settings(game_settings: dict, program_mode:str) -> dict:
                     lives_input = input(f"{CYAN}Please enter a number of lives: {RESET}")
                     lines_to_clear += 1 if not lives_input.isdigit() else 0
 
-                game_settings["lives"] = lives_input
+                game_settings["lives"] = int(lives_input)
                 print(f"{GREEN}Lives set to {BLUE}{game_settings['lives']}{GREEN}.")
             elif selection == 2:
                 game_settings["lives"] = 6
