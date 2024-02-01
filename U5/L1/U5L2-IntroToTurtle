@@ -1,0 +1,13 @@
+import turtle
+
+tony = turtle.Turtle()
+
+tony.forward(80)
+tony.left(90)
+tony.forward(80)
+tony.left(90)
+tony.forward(80)
+tony.left(90)
+tony.forward(80)
+
+turtle.done()
