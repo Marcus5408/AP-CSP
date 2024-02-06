@@ -1,0 +1,27 @@
+from rectangle import Rectangle
+
+rect1 = Rectangle(5, 10)
+rect1.area()
+rect1.perimeter()
+rect1.double_dimensions()
+rect1.area()
+rect1.perimeter()
+rect1 = Rectangle(150, 200)
+rect1.area()
+rect1.perimeter()
+rect1.half_dimensions()
+rect1.area()
+rect1.perimeter()
+
+rect2 = Rectangle(40, 20)
+rect2.area()
+rect2.perimeter()
+rect2 = Rectangle(60, 50)
+rect2.area()
+rect2.perimeter()
+rect2.half_dimensions()
+rect2.area()
+rect2.perimeter()
+
+rect1.area()
+rect1.perimeter()
