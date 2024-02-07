@@ -1,27 +1,9 @@
 from rectangle import Rectangle
+from random import randint
 
-rect1 = Rectangle(5, 10)
-rect1.area()
-rect1.perimeter()
-rect1.double_dimensions()
-rect1.area()
-rect1.perimeter()
-rect1 = Rectangle(150, 200)
-rect1.area()
-rect1.perimeter()
-rect1.half_dimensions()
-rect1.area()
-rect1.perimeter()
-
-rect2 = Rectangle(40, 20)
-rect2.area()
-rect2.perimeter()
-rect2 = Rectangle(60, 50)
-rect2.area()
-rect2.perimeter()
-rect2.half_dimensions()
-rect2.area()
-rect2.perimeter()
-
-rect1.area()
-rect1.perimeter()
+rectangles = []
+for i in range(100):
+    rectangles.append(Rectangle(randint(30, 50), randint(5, 25)))
+    print(f"Rectangle {i} -----------------")
+    rectangles[i].area()
+    rectangles[i].perimeter()
