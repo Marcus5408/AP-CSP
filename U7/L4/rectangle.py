@@ -1,7 +1,10 @@
+from typing import Tuple
+
 class Rectangle:
-    def __init__(self, length, width):
+    def __init__(self, length:int, width:int, position=Tuple[int, int]):
         self.length = length
         self.width = width
+        self.position = position
     
     def area(self):
         print(f"Area = {self.length * self.width}")
