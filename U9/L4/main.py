@@ -8,7 +8,7 @@ def RLE_compress(message: str) -> None:
         count = 1
         while i + count < len(message) and message[i + count] == message[i]:
             count += 1
-        first_pass += message[i] + str(count)
+        compressed += message[i] + str(count)
         i += count
 
     return first_pass
