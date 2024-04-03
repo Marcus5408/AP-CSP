@@ -1,7 +1,7 @@
 # this function takes a string message as a parameter,
 # performs Run Length Encoding on the string,
 # and returns a new string representing the compressed message.
-def RLE_compress(message):
+def RLE_compress(message: str) -> None:
     first_pass = ""
     i = 0
     while i < len(message):
